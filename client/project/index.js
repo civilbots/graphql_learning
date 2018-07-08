@@ -66,11 +66,12 @@ $(window).ready(function () {
                     totalPullRequests: pullRequests {
                         totalCount
                     }
+                    ... commitFragment
                 }
             }
         }
     }
-    `;
+    `+ commitFragment;
     gqlRequest(query, null, response => {
         console.log(`response: ${response}`);
         $("header h2").text(`Hello ${response.data.viewer.name}`);
@@ -80,6 +81,7 @@ $(window).ready(function () {
             console.log(`repo: ${repo.name}`)
             const content = `
                 <h3>${repo.name} </h3>
+                <p>${repo.ref.target.history.totalCount} commits</p>
                 <p>${repo.openIssues.totalCount} openIssues</p>
                 <p>${repo.totalIssues.totalCount} totalIssues</p>
                 <p>${repo.openPullRequests.totalCount} openPullRequests</p>
