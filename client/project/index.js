@@ -27,7 +27,7 @@ function gqlRequest(query, variables, onSuccess) {
         url: "https://api.github.com/graphql",
         contentType: "applicatin/json",
         headers: {
-            Authorization: "bearer ..."
+            Authorization: "bearer 818927ca6a521b50c46f8760755b22213281ccd4"
         },
         data: JSON.stringify({
             query: query,
@@ -54,10 +54,16 @@ $(window).ready(function () {
                 totalCount
                 nodes {
                     name
-                    issues (states: OPEN) {
+                    openIssues: issues (states: OPEN) {
                         totalCount
                     }
-                    pullRequests (states: OPEN){
+                    totalIssues: issues {
+                        totalCount
+                    }
+                    openPullRequests: pullRequests (states: OPEN){
+                        totalCount
+                    }
+                    totalPullRequests: pullRequests {
                         totalCount
                     }
                 }
@@ -72,7 +78,14 @@ $(window).ready(function () {
         const repos = response.data.viewer.repos.nodes;
         repos.forEach(repo => {
             console.log(`repo: ${repo.name}`)
-            $("ul").append(`<li>${repo.name}</li>`);
+            const content = `
+                <h3>${repo.name} </h3>
+                <p>${repo.openIssues.totalCount} openIssues</p>
+                <p>${repo.totalIssues.totalCount} totalIssues</p>
+                <p>${repo.openPullRequests.totalCount} openPullRequests</p>
+                <p>${repo.totalPullRequests.totalCount} totalPullRequests</p>
+            `;
+            $("ul").append(`<li>${content}</li>`);
         });
     })
 });
