@@ -27,7 +27,7 @@ function gqlRequest(query, variables, onSuccess) {
         url: "https://api.github.com/graphql",
         contentType: "applicatin/json",
         headers: {
-            Authorization: "bearer ad8f5744d6f287e7c66126a643ee3709e5e79657"
+            Authorization: "bearer 8c2a1cbfa1bb0c9fff4629e057b131f4fd1ac89c"
         },
         data: JSON.stringify({
             query: query,
@@ -47,28 +47,28 @@ function starHandler(element) {
 $(window).ready(function () {
     // GET NAME AND REPOSITORIES FOR VIEWER
     const query = `
-   {
-      viewer {
-        name
-        repos: repositories(first: 5) {
-            totalCount
-            nodes {
-                id
-                name
-                updatedAt
+    {
+        viewer {
+            name
+            repos: repositories(first: 5, orderBy: {field: CREATED_AT, direction: ASC}) {
+                totalCount
+                nodes {
+                    id
+                    name
+                    updatedAt
+                }
             }
         }
-      }
-   }
+    }
     `;
     gqlRequest(query, null, response => {
         console.log(`response: ${response}`);
         $("header h2").text(`Hello ${response.data.viewer.name}`);
-        if (response.data.viewer.repos.totalCount > 0 ) $("ul").empty();
+        if (response.data.viewer.repos.totalCount > 0) $("ul").empty();
         const repos = response.data.viewer.repos.nodes;
         repos.forEach(repo => {
             console.log(`repo: ${repo.name}`)
-          $("ul").append(`<li>${repo.name}</li>`);
+            $("ul").append(`<li>${repo.name}</li>`);
         });
     })
 });
