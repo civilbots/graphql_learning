@@ -27,7 +27,7 @@ function gqlRequest(query, variables, onSuccess) {
         url: "https://api.github.com/graphql",
         contentType: "applicatin/json",
         headers: {
-            Authorization: "bearer 294d3c044769f28a414de77a981d4b6833162bcc"
+            Authorization: "bearer ..."
         },
         data: JSON.stringify({
             query: query,
@@ -55,6 +55,9 @@ $(window).ready(function () {
                 nodes {
                     name
                     issues (states: OPEN) {
+                        totalCount
+                    }
+                    pullRequests (states: OPEN){
                         totalCount
                     }
                 }
